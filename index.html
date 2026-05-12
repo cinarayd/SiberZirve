@@ -12,8 +12,10 @@
 
     <div id="main-card" class="max-w-md w-full bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-700 p-8">
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-white">Dijital Güvenlik ve Girişimcilik Zirvesi</h1>
-            <p class="text-cyan-500 text-sm font-semibold mt-2">14 Mayıs 2026 - Kırmızı Salon</p>
+            <h1 onclick="adminTrigger()" class="text-2xl font-bold text-white cursor-default select-none">
+                <span class="text-cyan-500">S</span>iber Güvenlik ve Girişimcilik Zirvesi
+            </h1>
+            <p class="text-slate-400 text-sm mt-2">14 Mayıs 2026 - Kayıt Formu</p>
         </div>
 
         <div id="form-section" class="space-y-4">
@@ -23,71 +25,81 @@
         </div>
 
         <div id="result-section" class="hidden text-center space-y-6">
-            <div id="status-msg" class="p-4 rounded-lg bg-slate-800 border border-slate-700 text-sm"></div>
+            <div id="status-msg" class="p-4 rounded-lg bg-slate-800 border border-slate-700"></div>
             <button id="pdf-btn" onclick="downloadPDF()" class="hidden w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition shadow-lg">
                 Sertifikayı İndir (.PDF)
             </button>
-            <button onclick="location.reload()" class="text-xs text-slate-500 hover:text-slate-300 underline">Yeni Kayıt / Geri Dön</button>
+            <button onclick="location.reload()" class="text-xs text-slate-500 underline">Geri Dön</button>
         </div>
     </div>
 
-    <div class="mt-24 p-4 border-t border-slate-800 w-full max-w-xs text-center opacity-30 hover:opacity-100 transition-opacity">
-        <button onclick="toggleAdmin()" class="text-slate-500 text-xs uppercase tracking-widest font-bold">Yönetim Paneli</button>
-        <div id="admin-panel" class="hidden mt-6 p-6 bg-slate-800 rounded-xl border border-red-900/50 text-left">
-            <p class="text-[10px] font-black text-red-500 mb-4 tracking-tighter">SİSTEM YÖNETİCİSİ</p>
-            <label class="text-[10px] text-slate-400 block mb-2">AKTİF OTURUMU SEÇİN</label>
-            <select id="session-select" class="bg-slate-900 text-sm p-3 rounded-lg mb-4 w-full border border-slate-700">
-                <option value="1">1. Oturum: Siber Güvenlik (Battal Koç)</option>
-                <option value="2">2. Oturum: Yapay Zeka (Faruk Çimen)</option>
-                <option value="3">3. Oturum: Yazılım (İrem Arslan)</option>
-                <option value="4">4. Oturum: Siber Güvenlik Uzm. (Edip Gümüş)</option>
-                <option value="5">5. Oturum: Girişimcilik (Berat Anık)</option>
-                <option value="6">6. Oturum: Startup (M. Akif Uysal)</option>
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-[#1e293b] border border-red-500/50 p-6 rounded-xl w-full max-w-xs relative">
+            <button onclick="toggleAdmin()" class="absolute top-2 right-2 text-slate-400">✕</button>
+            <p class="text-red-500 font-bold text-xs mb-4 text-center">YÖNETİM PANELİ</p>
+            <label class="text-[10px] text-slate-400 block mb-1">AKTİF OTURUM</label>
+            <select id="session-select" class="bg-slate-900 text-sm p-3 rounded-lg mb-4 w-full border border-slate-700 text-white">
+                <option value="1">1. Oturum: Siber Güvenlik</option>
+                <option value="2">2. Oturum: Yapay Zeka</option>
+                <option value="3">3. Oturum: Yazılım</option>
+                <option value="4">4. Oturum: Siber Güvenlik Uzm.</option>
+                <option value="5">5. Oturum: Girişimcilik</option>
+                <option value="6">6. Oturum: Startup</option>
             </select>
-            <button onclick="updateActiveSession()" class="w-full bg-red-600/20 hover:bg-red-600/40 text-red-400 text-xs font-bold py-2 rounded-lg border border-red-600/30 transition">
-                Oturumu Güncelle
-            </button>
+            <button onclick="updateActiveSession()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg transition">Oturumu Güncelle</button>
         </div>
     </div>
 
     <script>
-        // API AYARLARI
-       const URL = "https://ipyfvbwziclshlwmvxex.supabase.co"; // Sadece bu kısmı yazın
-       const KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-"; 
-        // ÖNEMLİ: Alt satırı şu şekilde güncelleyin (global 'supabase' objesini kullanın)
-       const _supabase = window.supabase.createClient(URL, KEY);
+        // API Bağlantısı (Güncel URL ve Key)
+        const URL = "https://ipyfvbwziclshlwmvxex.supabase.co";
+        const KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-";
+        const _supabase = supabase.createClient(URL, KEY);
 
         let userData = null;
+        let clickCount = 0;
 
-        // Katılım İşlemi
+        // Gizli Admin Tetikleyici
+        function adminTrigger() {
+            clickCount++;
+            if (clickCount === 5) {
+                toggleAdmin();
+                clickCount = 0;
+            }
+            setTimeout(() => { clickCount = 0; }, 3000); // 3 saniye içinde basılmazsa sıfırla
+        }
+
+        function toggleAdmin() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        async function updateActiveSession() {
+            const sessionId = document.getElementById('session-select').value;
+            const { error } = await _supabase.from('ayarlar').update({ aktif_oturum_id: sessionId }).eq('id', 1);
+            if(error) alert("Hata: " + error.message);
+            else { alert("Sistem Güncellendi: Oturum " + sessionId); toggleAdmin(); }
+        }
+
         async function checkIn() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const btn = document.getElementById('submit-btn');
 
-            if(!name || !email) return alert("Lütfen adınızı ve e-postanızı girin.");
-            
-            btn.disabled = true;
-            btn.innerText = "Kaydediliyor...";
+            if(!name || !email) return alert("Lütfen alanları doldurun.");
+            btn.disabled = true; btn.innerText = "Kaydediliyor...";
 
             try {
-                // 1. Mevcut aktif oturumu öğren
                 const { data: config } = await _supabase.from('ayarlar').select('aktif_oturum_id').single();
                 
-                // 2. SQL Fonksiyonunu tetikle
                 const { error: rpcErr } = await _supabase.rpc('upsert_attendance', { 
-                    p_email: email, 
-                    p_name: name, 
-                    p_session: config.aktif_oturum_id 
+                    p_email: email, p_name: name, p_session: config.aktif_oturum_id 
                 });
-
                 if(rpcErr) throw rpcErr;
 
-                // 3. Kullanıcının güncel durumunu getir
                 const { data: user } = await _supabase.from('katilimcilar').select('*').eq('email', email).single();
                 userData = user;
 
-                // Arayüzü güncelle
                 document.getElementById('form-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
 
@@ -95,54 +107,28 @@
                 const msgBox = document.getElementById('status-msg');
 
                 if(sessionCount >= 3) {
-                    msgBox.innerHTML = `<span class="text-green-400 text-lg font-bold">TEBRİKLER!</span><br>Toplam <span class="text-white">${sessionCount}</span> oturuma katıldınız.<br>Sertifikanız oluşturuldu.`;
+                    msgBox.innerHTML = `<span class="text-green-400 font-bold">TEBRİKLER!</span><br>${sessionCount} oturuma katıldınız. Sertifikanız hazır.`;
                     document.getElementById('pdf-btn').classList.remove('hidden');
                 } else {
-                    msgBox.innerHTML = `Kaydınız alındı.<br>Sertifika için <span class="text-white">3</span> oturum gereklidir.<br>Mevcut katılımınız: <span class="text-cyan-400 font-bold">${sessionCount}</span>`;
+                    msgBox.innerHTML = `Kaydınız alındı. Sertifika için 3 oturum gerekiyor.<br><span class="text-cyan-400">Mevcut: ${sessionCount}</span>`;
                 }
             } catch (err) {
                 console.error(err);
-                alert("İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.");
-                btn.disabled = false;
-                btn.innerText = "Oturuma Katıl";
+                alert("Bağlantı hatası! SQL fonksiyonunun ve RLS izinlerinin ayarlı olduğundan emin olun.");
+                btn.disabled = false; btn.innerText = "Oturuma Katıl";
             }
         }
 
-        // Admin Paneli Kontrolleri
-        function toggleAdmin() { document.getElementById('admin-panel').classList.toggle('hidden'); }
-
-        async function updateActiveSession() {
-            const sessionId = document.getElementById('session-select').value;
-            const { error } = await _supabase.from('ayarlar').update({ aktif_oturum_id: sessionId }).eq('id', 1);
-            
-            if(error) alert("Hata: " + error.message);
-            else alert("Başarılı! Artık " + sessionId + ". oturum kayıtları alınıyor.");
-        }
-
-        // Sertifika PDF Oluşturucu
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('l', 'mm', 'a4');
-            
-            // Tasarım
-            doc.setFillColor(15, 23, 42); 
-            doc.rect(0, 0, 297, 210, 'F');
-            
-            doc.setTextColor(34, 211, 238);
-            doc.setFontSize(40);
+            doc.setFillColor(15, 23, 42); doc.rect(0, 0, 297, 210, 'F');
+            doc.setTextColor(34, 211, 238); doc.setFontSize(40);
             doc.text("KATILIM SERTİFİKASI", 148, 70, { align: "center" });
-
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(20);
-            doc.text("Sayın", 148, 95, { align: "center" });
-            
-            doc.setFontSize(35);
-            doc.text(userData.ad_soyad.toUpperCase(), 148, 115, { align: "center" });
-
-            doc.setFontSize(14);
-            doc.text("Dijital Güvenlik ve Girişimcilik Zirvesi Katılımcısı", 148, 145, { align: "center" });
-            doc.text("14 Mayıs 2026 - İskenderun Teknik Üniversitesi", 148, 155, { align: "center" });
-
+            doc.setTextColor(255, 255, 255); doc.setFontSize(35);
+            doc.text(userData.ad_soyad.toUpperCase(), 148, 120, { align: "center" });
+            doc.setFontSize(16);
+            doc.text("Dijital Güvenlik ve Girişimcilik Zirvesi Katılımcısı", 148, 150, { align: "center" });
             doc.save(`Sertifika_${userData.ad_soyad}.pdf`);
         }
     </script>
