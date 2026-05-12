@@ -52,9 +52,10 @@
 
     <script>
         // API AYARLARI
-        const URL = "https://ipyfvbwziclshlwmvxex.supabase.co"; 
-        const KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-"; 
-        const _supabase = supabase.createClient(URL, KEY);
+       const URL = "https://ipyfvbwziclshlwmvxex.supabase.co"; // Sadece bu kısmı yazın
+       const KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-"; 
+        // ÖNEMLİ: Alt satırı şu şekilde güncelleyin (global 'supabase' objesini kullanın)
+       const _supabase = window.supabase.createClient(URL, KEY);
 
         let userData = null;
 
