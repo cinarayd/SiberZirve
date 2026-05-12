@@ -13,7 +13,7 @@
     <div id="main-card" class="max-w-md w-full bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-700 p-8">
         <div class="text-center mb-8">
             <h1 onclick="adminTrigger()" class="text-2xl font-bold text-white cursor-default select-none">
-                <span class="text-cyan-500">S</span>iber Güvenlik ve Girişimcilik Zirvesi
+                <span id="trigger" class="text-cyan-500">S</span>iber Güvenlik ve Girişimcilik Zirvesi
             </h1>
             <p class="text-slate-400 text-sm mt-2">14 Mayıs 2026 - Kayıt Formu</p>
         </div>
@@ -34,60 +34,62 @@
     </div>
 
     <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-[#1e293b] border border-red-500/50 p-6 rounded-xl w-full max-w-xs relative">
-            <button onclick="toggleAdmin()" class="absolute top-2 right-2 text-slate-400">✕</button>
-            <p class="text-red-500 font-bold text-xs mb-4 text-center">YÖNETİM PANELİ</p>
-            <label class="text-[10px] text-slate-400 block mb-1">AKTİF OTURUM</label>
+        <div class="bg-[#1e293b] border border-red-500/50 p-6 rounded-xl w-full max-w-xs">
+            <p class="text-red-500 font-bold text-xs mb-4 text-center text-white">YÖNETİM PANELİ</p>
             <select id="session-select" class="bg-slate-900 text-sm p-3 rounded-lg mb-4 w-full border border-slate-700 text-white">
-                <option value="1">1. Oturum: Siber Güvenlik</option>
-                <option value="2">2. Oturum: Yapay Zeka</option>
-                <option value="3">3. Oturum: Yazılım</option>
-                <option value="4">4. Oturum: Siber Güvenlik Uzm.</option>
-                <option value="5">5. Oturum: Girişimcilik</option>
-                <option value="6">6. Oturum: Startup</option>
+                <option value="1">1. Oturum Başlat</option>
+                <option value="2">2. Oturum Başlat</option>
+                <option value="3">3. Oturum Başlat</option>
+                <option value="4">4. Oturum Başlat</option>
+                <option value="5">5. Oturum Başlat</option>
+                <option value="6">6. Oturum Başlat</option>
             </select>
-            <button onclick="updateActiveSession()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg transition">Oturumu Güncelle</button>
+            <button onclick="updateActiveSession()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg mb-2">Güncelle</button>
+            <button onclick="toggleAdmin()" class="w-full text-slate-400 text-xs">Kapat</button>
         </div>
     </div>
 
     <script>
-        // API Bağlantısı (Güncel URL ve Key)
-        const URL = "https://ipyfvbwziclshlwmvxex.supabase.co";
-        const KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-";
-        const _supabase = supabase.createClient(URL, KEY);
-
-        let userData = null;
+        // DEĞİŞKENLERİ ÖNCEDEN TANIMLIYORUZ (Konsoldaki ReferenceError'u çözer)
         let clickCount = 0;
+        let userData = null;
 
-        // Gizli Admin Tetikleyici
+        // URL ve KEY (Resimdeki bilgilere göre düzeltildi)
+        const SUPABASE_URL = "https://ipyfvbwziclshlwmvxex.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-";
+
+        // Supabase Client Başlatma (window.supabase kullanarak konsol hatasını çözer)
+        const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Admin Paneli Fonksiyonları
         function adminTrigger() {
             clickCount++;
             if (clickCount === 5) {
                 toggleAdmin();
                 clickCount = 0;
             }
-            setTimeout(() => { clickCount = 0; }, 3000); // 3 saniye içinde basılmazsa sıfırla
+            setTimeout(() => { clickCount = 0; }, 2000);
         }
 
         function toggleAdmin() {
-            const modal = document.getElementById('admin-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('admin-modal').classList.toggle('hidden');
         }
 
         async function updateActiveSession() {
-            const sessionId = document.getElementById('session-select').value;
-            const { error } = await _supabase.from('ayarlar').update({ aktif_oturum_id: sessionId }).eq('id', 1);
+            const sId = document.getElementById('session-select').value;
+            const { error } = await _supabase.from('ayarlar').update({ aktif_oturum_id: sId }).eq('id', 1);
             if(error) alert("Hata: " + error.message);
-            else { alert("Sistem Güncellendi: Oturum " + sessionId); toggleAdmin(); }
+            else { alert("Oturum " + sId + " aktif edildi."); toggleAdmin(); }
         }
 
+        // Katılım Fonksiyonu
         async function checkIn() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const btn = document.getElementById('submit-btn');
 
-            if(!name || !email) return alert("Lütfen alanları doldurun.");
-            btn.disabled = true; btn.innerText = "Kaydediliyor...";
+            if(!name || !email) return alert("Bilgileri girin.");
+            btn.disabled = true; btn.innerText = "İşleniyor...";
 
             try {
                 const { data: config } = await _supabase.from('ayarlar').select('aktif_oturum_id').single();
@@ -107,15 +109,15 @@
                 const msgBox = document.getElementById('status-msg');
 
                 if(sessionCount >= 3) {
-                    msgBox.innerHTML = `<span class="text-green-400 font-bold">TEBRİKLER!</span><br>${sessionCount} oturuma katıldınız. Sertifikanız hazır.`;
+                    msgBox.innerHTML = `<b class="text-green-400">TEBRİKLER!</b><br>${sessionCount} oturuma katıldınız. Sertifikanız hazır.`;
                     document.getElementById('pdf-btn').classList.remove('hidden');
                 } else {
                     msgBox.innerHTML = `Kaydınız alındı. Sertifika için 3 oturum gerekiyor.<br><span class="text-cyan-400">Mevcut: ${sessionCount}</span>`;
                 }
             } catch (err) {
                 console.error(err);
-                alert("Bağlantı hatası! SQL fonksiyonunun ve RLS izinlerinin ayarlı olduğundan emin olun.");
-                btn.disabled = false; btn.innerText = "Oturuma Katıl";
+                alert("Bağlantı Hatası: Lütfen RLS izinlerini ve SQL fonksiyonunu kontrol edin.");
+                btn.disabled = false; btn.innerText = "Tekrar Dene";
             }
         }
 
@@ -125,10 +127,10 @@
             doc.setFillColor(15, 23, 42); doc.rect(0, 0, 297, 210, 'F');
             doc.setTextColor(34, 211, 238); doc.setFontSize(40);
             doc.text("KATILIM SERTİFİKASI", 148, 70, { align: "center" });
-            doc.setTextColor(255, 255, 255); doc.setFontSize(35);
-            doc.text(userData.ad_soyad.toUpperCase(), 148, 120, { align: "center" });
+            doc.setTextColor(255, 255, 255); doc.setFontSize(30);
+            doc.text(userData.ad_soyad.toUpperCase(), 148, 110, { align: "center" });
             doc.setFontSize(16);
-            doc.text("Dijital Güvenlik ve Girişimcilik Zirvesi Katılımcısı", 148, 150, { align: "center" });
+            doc.text("Dijital Güvenlik ve Girişimcilik Zirvesi", 148, 140, { align: "center" });
             doc.save(`Sertifika_${userData.ad_soyad}.pdf`);
         }
     </script>
