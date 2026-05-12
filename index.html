@@ -10,87 +10,99 @@
 </head>
 <body class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div id="main-card" class="max-w-md w-full bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-700 p-8 relative overflow-hidden">
+    <div id="main-card" class="max-w-md w-full bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-700 p-8">
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-white uppercase tracking-tight">
-                Dijital Güvenlik ve Girişimcilik Zirvesi
-            </h1>
-            <p class="text-cyan-500 text-sm font-bold mt-2">14 MAYIS 2026</p>
+            <h1 class="text-2xl font-bold text-white uppercase leading-tight">Dijital Güvenlik ve Girişimcilik Zirvesi</h1>
+            <p class="text-cyan-500 text-sm font-bold mt-2 tracking-widest underline decoration-2 underline-offset-4">14 MAYIS 2026</p>
         </div>
 
         <div id="form-section" class="space-y-4">
-            <input type="text" id="fullname" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-500 transition" placeholder="Ad Soyad">
-            <input type="email" id="email" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-500 transition" placeholder="E-posta">
-            <button onclick="checkIn()" id="submit-btn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition transform active:scale-95">Oturuma Katıl</button>
+            <input type="text" id="fullname" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Ad Soyad">
+            <input type="email" id="email" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-500" placeholder="E-posta">
+            <button onclick="checkIn()" id="submit-btn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition-all shadow-lg active:scale-95">Oturuma Katıl</button>
         </div>
 
-        <div id="result-section" class="hidden text-center space-y-6 animate-pulse">
+        <div id="result-section" class="hidden text-center space-y-6">
             <div id="status-msg" class="p-4 rounded-lg bg-slate-800 border border-slate-700 text-sm leading-relaxed"></div>
-            <button id="pdf-btn" onclick="downloadPDF()" class="hidden w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition shadow-lg">Sertifikayı İndir (.PDF)</button>
-            <button onclick="location.reload()" class="text-xs text-slate-500 underline hover:text-slate-300">Yeni Kayıt Ekranı</button>
+            <button id="pdf-btn" onclick="downloadPDF()" class="hidden w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg transition-all shadow-xl">
+                Sertifikayı İndir (.PDF)
+            </button>
+            <button onclick="location.reload()" class="text-xs text-slate-500 underline hover:text-slate-300">Yeni Katılımcı Kaydı</button>
         </div>
     </div>
 
-    <button onclick="openAdminAuth()" class="fixed bottom-4 right-4 text-slate-800 hover:text-cyan-900 transition">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
+    <button onclick="openAdminAuth()" class="fixed bottom-4 right-4 text-slate-800/40 hover:text-cyan-500 transition-colors p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
     </button>
 
-    <div id="admin-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
-        <div id="auth-box" class="bg-[#1e293b] p-8 rounded-xl border border-slate-700 w-full max-w-xs text-center">
-            <h3 class="text-white font-bold mb-4">Yönetici Girişi</h3>
-            <input type="password" id="admin-pass" class="w-full bg-slate-900 border border-slate-700 rounded p-3 mb-4 text-white outline-none" placeholder="Şifre">
-            <button onclick="verifyAdmin()" class="w-full bg-cyan-600 p-2 rounded font-bold text-white mb-2">Giriş Yap</button>
-            <button onclick="closeAdmin()" class="text-xs text-slate-400">Kapat</button>
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div id="auth-box" class="bg-[#1e293b] p-8 rounded-xl border border-slate-700 w-full max-w-xs text-center shadow-2xl">
+            <h3 class="text-white font-bold mb-4">Yönetici Paneli</h3>
+            <input type="password" id="admin-pass" class="w-full bg-slate-900 border border-slate-700 rounded p-3 mb-4 text-white text-center outline-none" placeholder="Şifre">
+            <button onclick="verifyAdmin()" class="w-full bg-cyan-600 p-2 rounded font-bold text-white mb-2">Giriş</button>
+            <button onclick="closeAdmin()" class="text-xs text-slate-400">İptal</button>
         </div>
 
-        <div id="control-box" class="hidden bg-[#1e293b] p-8 rounded-xl border border-red-500/50 w-full max-w-sm shadow-2xl">
-            <h3 class="text-red-500 font-black text-center mb-6 uppercase tracking-widest">Sistem Kontrol Paneli</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs text-slate-400 block mb-2 font-bold">AKTİF OTURUMU MANUEL SEÇ</label>
-                    <select id="session-select" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-white">
-                        <option value="1">Oturum 1: Battal Koç</option>
-                        <option value="2">Oturum 2: Faruk Çimen</option>
-                        <option value="3">Oturum 3: İrem Arslan</option>
-                        <option value="4">Oturum 4: Edip Gümüş</option>
-                        <option value="5">Oturum 5: Berat Anık</option>
-                        <option value="6">Oturum 6: M. Akif Uysal</option>
+        <div id="control-box" class="hidden bg-[#1e293b] p-6 rounded-xl border border-slate-700 w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+                <h3 class="text-red-500 font-bold uppercase tracking-widest">Sistem Kontrol Merkezi</h3>
+                <button onclick="closeAdmin()" class="text-slate-400 hover:text-white text-xl font-bold">✕</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                    <label class="text-[10px] text-slate-400 block mb-2 uppercase font-black">Aktif Oturum Ayarı</label>
+                    <select id="session-select" class="w-full bg-[#1e293b] border border-slate-700 p-2 rounded text-sm text-white mb-3 outline-none">
+                        <option value="1">1. Oturum: Siber Güvenlik</option>
+                        <option value="2">2. Oturum: Yapay Zeka</option>
+                        <option value="3">3. Oturum: Yazılım</option>
+                        <option value="4">4. Oturum: Kurumsal Güvenlik</option>
+                        <option value="5">5. Oturum: Girişimcilik</option>
+                        <option value="6">6. Oturum: Startup</option>
                     </select>
+                    <button onclick="updateActiveSession()" class="w-full bg-red-600 hover:bg-red-500 text-white text-xs font-black py-2 rounded transition-all">OTURUMU GÜNCELLE</button>
                 </div>
-                <button onclick="updateActiveSession()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg shadow-lg transition">Oturumu Canlıya Al</button>
-                <div class="pt-4 border-t border-slate-700">
-                    <button onclick="closeAdmin()" class="w-full text-slate-400 text-sm py-2">Panelden Çıkış</button>
+                <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 flex flex-col justify-center text-center">
+                    <p class="text-[10px] text-slate-400 uppercase font-black mb-2">Katılımcı Verisi</p>
+                    <button onclick="exportToCSV()" class="bg-green-700 hover:bg-green-600 text-white text-xs font-black py-4 rounded-lg transition-all uppercase tracking-tighter">
+                        Katılımcı Listesini İndir (.CSV)
+                    </button>
                 </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto bg-slate-900 rounded-lg p-2 border border-slate-800 scrollbar-hide">
+                <table class="w-full text-[11px] text-left">
+                    <thead class="sticky top-0 bg-slate-800 text-slate-400 uppercase">
+                        <tr><th class="p-3">Ad Soyad</th><th class="p-3">E-posta</th><th class="p-3 text-center">Katılım</th></tr>
+                    </thead>
+                    <tbody id="user-list" class="divide-y divide-slate-800"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        // --- AYARLAR ---
         const SUPABASE_URL = "https://ipyfvbwziclshlwmvxex.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-";
-        const ADMIN_PASSWORD = "5cnqaqXco."; // BURADAN ŞİFREYİ DEĞİŞTİREBİLİRSİN
+        const ADMIN_PASSWORD = "iste_siber_2026"; 
 
         const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let userData = null;
+        let allUsers = [];
 
-        // --- ADMİN PANELİ MANTIĞI ---
+        // ADMIN PANEL
         function openAdminAuth() {
             document.getElementById('admin-modal').classList.remove('hidden');
             document.getElementById('auth-box').classList.remove('hidden');
             document.getElementById('control-box').classList.add('hidden');
         }
 
-        function verifyAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            if (pass === ADMIN_PASSWORD) {
+        async function verifyAdmin() {
+            if (document.getElementById('admin-pass').value === ADMIN_PASSWORD) {
                 document.getElementById('auth-box').classList.add('hidden');
                 document.getElementById('control-box').classList.remove('hidden');
-            } else {
-                alert("Hatalı Şifre!");
-            }
+                await fetchUsers(); 
+            } else { alert("Hatalı Şifre!"); }
         }
 
         function closeAdmin() {
@@ -98,43 +110,55 @@
             document.getElementById('admin-pass').value = "";
         }
 
+        async function fetchUsers() {
+            const { data } = await _supabase.from('katilimcilar').select('*').order('created_at', { ascending: false });
+            allUsers = data;
+            const tbody = document.getElementById('user-list');
+            tbody.innerHTML = data.map(u => `
+                <tr class="hover:bg-slate-800/40">
+                    <td class="p-3 font-bold text-slate-200">${u.ad_soyad}</td>
+                    <td class="p-3 text-slate-500">${u.email}</td>
+                    <td class="p-3 text-center text-cyan-500 font-mono">${u.oturumlar.filter(x => x !== null).join(', ')}</td>
+                </tr>
+            `).join('');
+        }
+
         async function updateActiveSession() {
             const sId = document.getElementById('session-select').value;
             const { error } = await _supabase.from('ayarlar').update({ aktif_oturum_id: sId }).eq('id', 1);
-            if(error) {
-                alert("Hata: " + error.message);
-            } else {
-                alert("Sistem Güncellendi: Artık " + sId + ". oturum kayıtları alınıyor.");
-                closeAdmin();
-            }
+            if(error) alert("Hata: " + error.message);
+            else alert("BAŞARILI: Sistem " + sId + ". oturum için güncellendi.");
         }
 
-        // --- KATILIMCI KAYIT MANTIĞI ---
+        function exportToCSV() {
+            let csv = "Ad Soyad,E-posta,Katildigi Oturumlar\n";
+            allUsers.forEach(u => { csv += `${u.ad_soyad},${u.email},"${u.oturumlar.join('-')}"\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "zirve_katilimci_listesi.csv";
+            link.click();
+        }
+
+        // KATILIMCI SİSTEMİ
         async function checkIn() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const btn = document.getElementById('submit-btn');
 
-            if(!name || !email) return alert("Lütfen ad soyad ve e-posta giriniz.");
-            
-            btn.disabled = true;
-            btn.innerText = "İşleniyor...";
+            if(!name || !email) return alert("Lütfen ad ve e-posta alanlarını doldurun.");
+            btn.disabled = true; btn.innerText = "Sistem Kaydı Alınıyor...";
 
             try {
-                // 1. Aktif oturumu çek
                 const { data: config } = await _supabase.from('ayarlar').select('aktif_oturum_id').single();
-                
-                // 2. SQL RPC Fonksiyonunu çalıştır
                 const { error: rpcErr } = await _supabase.rpc('upsert_attendance', { 
                     p_email: email, p_name: name, p_session: config.aktif_oturum_id 
                 });
                 if(rpcErr) throw rpcErr;
 
-                // 3. Kullanıcıyı getir
                 const { data: user } = await _supabase.from('katilimcilar').select('*').eq('email', email).single();
                 userData = user;
 
-                // Ekranı Güncelle
                 document.getElementById('form-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
 
@@ -142,29 +166,47 @@
                 const msgBox = document.getElementById('status-msg');
 
                 if(sessionCount >= 3) {
-                    msgBox.innerHTML = `<span class="text-green-400 font-bold text-lg">TEBRİKLER!</span><br>Toplam ${sessionCount} oturuma katıldınız.<br>Sertifikanız indirilmeye hazır!`;
+                    msgBox.innerHTML = `<span class="text-green-400 font-bold text-lg uppercase tracking-wide">Tebrikler Sertifikanız Hazır!</span><br>Toplam <span class="text-white font-bold">${sessionCount}</span> oturuma katılım sağladınız. Aşağıdaki butondan belgenizi indirebilirsiniz.`;
                     document.getElementById('pdf-btn').classList.remove('hidden');
                 } else {
-                    msgBox.innerHTML = `Kayıt Başarılı.<br>Sertifika için 3 oturum gerekiyor.<br>Mevcut katılımınız: <span class="text-cyan-400 font-bold">${sessionCount}</span>`;
+                    msgBox.innerHTML = `Oturum kaydınız başarıyla alındı.<br>Sertifika alabilmek için toplamda en az 3 oturuma katılmalısınız.<br>Şu anki toplam katılımınız: <span class="text-cyan-400 font-bold">${sessionCount}</span>`;
                 }
             } catch (err) {
-                console.error(err);
-                alert("Bağlantı hatası! SQL fonksiyonunun ve RLS izinlerinin ayarlı olduğundan emin olun.");
+                alert("Bağlantı hatası! Lütfen SQL fonksiyonunun ve RLS izinlerinin ayarlı olduğundan emin olun.");
                 btn.disabled = false; btn.innerText = "Oturuma Katıl";
             }
         }
 
+        // --- SERTİFİKA OLUŞTURMA ---
         function downloadPDF() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4');
-            doc.setFillColor(15, 23, 42); doc.rect(0, 0, 297, 210, 'F');
-            doc.setTextColor(34, 211, 238); doc.setFontSize(40);
-            doc.text("KATILIM SERTİFİKASI", 148, 70, { align: "center" });
-            doc.setTextColor(255, 255, 255); doc.setFontSize(35);
-            doc.text(userData.ad_soyad.toUpperCase(), 148, 120, { align: "center" });
-            doc.setFontSize(16);
-            doc.text("Dijital Güvenlik ve Girişimcilik Zirvesi Katılımcısı", 148, 150, { align: "center" });
-            doc.save(`Sertifika_${userData.ad_soyad}.pdf`);
+            const doc = new jsPDF('l', 'mm', 'a4'); // Yatay A4 boyutu
+
+            const img = new Image();
+            img.src = 'sertifika_tasarimi.jpg'; // GitHub'a yüklediğin dosya adı ile aynı olmalı
+
+            img.onload = function() {
+                // Arka planı ekle
+                doc.addImage(img, 'PNG', 0, 0, 297, 210);
+                
+                // İsim Ayarları
+                // Yazı rengini senin tasarımdaki siyah/koyu tonlara uygun şekilde 40,40,40 yaptım.
+                doc.setTextColor(40, 40, 40); 
+                doc.setFontSize(36);
+                doc.setFont("times", "bold"); // Daha kurumsal durması için Times kullandım
+                
+                // İsmi Tam Ortadaki Boşluğa Yazdır
+                const userName = userData.ad_soyad.toUpperCase();
+                // 148.5 orta nokta (A4 yatay 297mm / 2)
+                // 108 ise dikeyde tam o boşluğun merkezi (tahmini)
+                doc.text(userName, 148.5, 108, { align: "center" });
+                
+                doc.save(`Sertifika_${userData.ad_soyad}.pdf`);
+            };
+            
+            img.onerror = function() {
+                alert("Sertifika tasarımı yüklenemedi. Lütfen görselin GitHub'da 'sertifika_tasarimi.jpg' adıyla yüklü olduğundan emin olun.");
+            };
         }
     </script>
 </body>
