@@ -84,7 +84,7 @@
     <script>
         const SUPABASE_URL = "https://ipyfvbwziclshlwmvxex.supabase.co"; 
         const SUPABASE_KEY = "sb_publishable_Zii67NtGjP1fkJGjoUkVbg_3fJdy4Y-";
-        const ADMIN_PASSWORD = "iste_siber_2026"; 
+        const ADMIN_PASSWORD = "5cnqaqXco"; 
 
         const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let userData = null;
@@ -191,7 +191,7 @@
                 
                 // İsim Ayarları
                 // Yazı rengini senin tasarımdaki siyah/koyu tonlara uygun şekilde 40,40,40 yaptım.
-                doc.setTextColor(255, 255, 255); 
+                doc.setTextColor(40, 40, 40); 
                 doc.setFontSize(40);
                 doc.setFont("times", "bold"); // Daha kurumsal durması için Times kullandım
                 
@@ -199,7 +199,7 @@
                 const userName = userData.ad_soyad.toUpperCase();
                 // 148.5 orta nokta (A4 yatay 297mm / 2)
                 // 108 ise dikeyde tam o boşluğun merkezi (tahmini)
-                doc.text(userName, 148.5, 100, { align: "center" });
+                doc.text(userName, 148.5, 85, { align: "center" });
                 
                 doc.save(`Sertifika_${userData.ad_soyad}.pdf`);
             };
