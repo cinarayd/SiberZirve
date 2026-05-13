@@ -193,13 +193,13 @@
                 // Yazı rengini senin tasarımdaki siyah/koyu tonlara uygun şekilde 40,40,40 yaptım.
                 doc.setTextColor(40, 40, 40); 
                 doc.setFontSize(40);
-                doc.setFont("arial", "bold"); // Daha kurumsal durması için Times kullandım
+                doc.setFont("montserrat", "bold"); // Daha kurumsal durması için Times kullandım
                 
                 // İsmi Tam Ortadaki Boşluğa Yazdır
                 const userName = userData.ad_soyad.toUpperCase();
                 // 148.5 orta nokta (A4 yatay 297mm / 2)
                 // 108 ise dikeyde tam o boşluğun merkezi (tahmini)
-                doc.text(userName, 130,105 , { align: "center" });
+                doc.text(userName, 125,108 , { align: "center" });
                 
                 doc.save(`Sertifika_${userData.ad_soyad}.pdf`);
             };
