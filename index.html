@@ -70,6 +70,14 @@
                 </div>
             </div>
 
+            <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 mb-4">
+                <label class="text-[10px] text-slate-400 block mb-2 uppercase font-black">Manuel Sertifika Oluştur</label>
+                <div class="flex gap-2">
+                    <input type="text" id="manual-cert-name" class="flex-1 bg-[#1e293b] border border-slate-700 rounded px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Ad Soyad girin...">
+                    <button onclick="downloadManualPDF()" class="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black px-4 py-2 rounded transition-all whitespace-nowrap">Sertifika İndir</button>
+                </div>
+            </div>
+
             <div class="flex-1 overflow-y-auto bg-slate-900 rounded-lg p-2 border border-slate-800 scrollbar-hide">
                 <table class="w-full text-[11px] text-left">
                     <thead class="sticky top-0 bg-slate-800 text-slate-400 uppercase">
@@ -206,6 +214,30 @@
             
             img.onerror = function() {
                 alert("Sertifika tasarımı yüklenemedi. Lütfen görselin GitHub'da 'sertifika_tasarimi.jpg' adıyla yüklü olduğundan emin olun.");
+            };
+        }
+        // --- MANUEL SERTİFİKA ---
+        function downloadManualPDF() {
+            const name = document.getElementById('manual-cert-name').value.trim();
+            if (!name) return alert("Lütfen bir isim girin.");
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4');
+
+            const img = new Image();
+            img.src = 'sertifika_tasarimi.jpg';
+
+            img.onload = function() {
+                doc.addImage(img, 'PNG', 0, 0, 297, 210);
+                doc.setTextColor(40, 40, 40);
+                doc.setFontSize(40);
+                doc.setFont("helvetica", "bold");
+                doc.text(name.toUpperCase(), 125, 108, { align: "center" });
+                doc.save(`Sertifika_${name}.pdf`);
+            };
+
+            img.onerror = function() {
+                alert("Sertifika tasarımı yüklenemedi. Lütfen 'sertifika_tasarimi.jpg' dosyasının mevcut olduğundan emin olun.");
             };
         }
     </script>
